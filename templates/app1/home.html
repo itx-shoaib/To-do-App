@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}  {% endblock %}
+
+{% block body %}
+
+    <section class="w-auto p-3" style="background-color: #eee;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-lg-9 col-xl-7">
+        <div class="card rounded-3">
+          <div class="card-body p-4">
+
+            <h4 class="text-center my-3 pb-3" style="font-size: calc(1.275rem + .3vw);">To Do App</h4>
+            <form method="post" action="/save/" class="row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2" style=" height: 62px;">
+              {% csrf_token %}
+              <div class="col-12">
+                <div class="form-outline">
+                  <input type="text" id="content" name="content" class="form-control" />
+                  <label class="form-label" for="content">Enter a task here</label>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <button type="submit" class="btn btn-primary">Save</button>
+              </div>
+            </form>
+
+
+            <table class="table mb-4">
+              <thead>
+                <tr>
+                  <th scope="col">No.</th>
+                  <th scope="col">Todo item</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              {% if tasks %}
+              {% for items in tasks %}
+
+              <tbody>
+                <tr>
+                  <th scope="row">{{ items.task_id }}</th>
+                  <td>{{ items.content }}</td>
+
+                  {% if items.status is True %}
+                  <td>Task Done</td>
+                  {% else %}
+                  <td> In Progress  </td>
+                  {% endif %}
+
+<!--&lt;!&ndash;               -->
+                <td>
+
+
+                    <button type="submit"  class="btn btn-danger"><a href="/delete/{{ items.task_id }}"> Delete </a></button>
+                    <form method="post" action="/finish/">
+                     {% csrf_token %}
+                      <input type="checkbox" id="finish" name="finish" value="{{ items.task_id }}">
+                      <label for="finish"> Finish </label><br>
+                    <button type="submit" class="btn btn-success ms-1">Finished</button>
+                  </form>
+                  </td>
+                </tr>
+              </tbody>
+
+              {% endfor %}
+              {% else %}
+                <div class="col-12">
+                <button type="submit" class="btn btn-outline-info"><a href="http://127.0.0.1:8000/">Get tasks</a></button>
+              </div>
+
+              {% endif %}
+            </table>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
